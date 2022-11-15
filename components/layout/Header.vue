@@ -28,8 +28,6 @@
         <div class="header-bottom">
             <ul v-if="!loading">
                 <NuxtLink to="/">Home</NuxtLink>
-                <NuxtLink to="/auth/login">Login</NuxtLink>
-                <NuxtLink to="/auth/register">Registro</NuxtLink>
                 <NuxtLink to="/productos/add">Agregar</NuxtLink>
                 <NuxtLink to="/order-history">Historial de compras</NuxtLink>
                 <!-- <Header-links routing="/atencion-cliente" text="Atencion"/>
@@ -47,7 +45,7 @@
 <script setup lang="ts">
 
     const isAuth = useAuth()
-    
+
     const logout = () =>{
         isAuth.value = false
         const token = useCookie<string|null>('Authorization')

@@ -4,15 +4,13 @@ export default defineEventHandler(async (event)=>{
 
     const bodyData = await readBody(event)
 
-    const value = await Category.create(bodyData).then(()=>{
-        return{
-            res: true
-        }
-    }).catch(()=>{
+    const value = await Category.create(bodyData).catch(()=>{
         return{
             res: 'Inserte bien los datos'
         }
     })
 
-    return value
+    return {
+        res: true
+    }
 })

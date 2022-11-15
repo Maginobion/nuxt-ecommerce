@@ -12,10 +12,11 @@
             >
 
             <label for="contra" class="form-label">Contraseña:</label>
-            <input 
-                class="form-input" 
+            <input
+                class="form-input"
+                type="password" 
                 name="pass" 
-                id="contra" 
+                id="contra"
                 placeholder="Ingrese su contraseña"
                 required
             >
@@ -50,7 +51,7 @@
         if(res.status){
             const auth = useAuth()
             auth.value = true
-            console.log('logueado', auth)
+            navigateTo('/')
         }
     }
 </script>

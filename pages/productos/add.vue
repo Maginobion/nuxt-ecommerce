@@ -79,7 +79,13 @@
                 id="category"
             >
 
-            <input type="submit" class="categorySubmit" value="Confirmar">
+            <input 
+                type="submit" 
+                class="categorySubmit" 
+                value="Confirmar"
+                :disabled="disabled"
+            >
+            {{mensajes}}
         </form>
     </div>
 </template>
@@ -91,6 +97,10 @@
     })
 
     const imagen = ref<File | undefined>()
+
+    const mensajes = ref<boolean | string>('')
+
+    const disabled = ref<boolean>(false)
 
     const {data:categories, pending} = await useFetch('/api/categories/all')
 
@@ -157,9 +167,12 @@
         const res = await $fetch('/api/categories/add',{
             method: 'POST',
             body: formProps
-        }).catch(e=>console.log(e))
+        }).catch(e=>mensajes.value=e)
 
-        console.log(res)
+        if(res.res===true){
+            mensajes.value='Categoría registrada con éxito.'
+            disabled.value=true
+        }
     }
 </script>
 
@@ -234,6 +247,12 @@
     cursor: pointer;
     transition: all .5s ease;
 }
+
+.btn-submit:disabled {
+    background-color: gray;
+    cursor: default;
+}
+
 .form .btn-submit:hover, .categorySubmit:hover{
     background-color: var(--color-secondary);
 }
@@ -248,5 +267,10 @@
     padding: 15px 20px;
     cursor: pointer;
     transition: all .5s ease;
+}
+
+.categorySubmit:disabled{
+    cursor: default;
+    background-color: gray;
 }
 </style>

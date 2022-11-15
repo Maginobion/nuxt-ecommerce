@@ -21,12 +21,30 @@
 .productGrid{
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 10px;
 }
 .productCard{
-    background-color: aqua;
+    background-color: var(--bg-secondary);
     padding: 10px 14px;
     border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.productCard p{
+    color: var(--color);
+}
+
+a{
+    margin-top: auto;
+    color: var(--color-primary);
+    width: 100%;
+    text-decoration: none;
+    background-color: aquamarine;
+    padding: 4px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    text-align: center;
 }
 </style>
