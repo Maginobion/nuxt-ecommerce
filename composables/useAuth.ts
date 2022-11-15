@@ -1,14 +1,9 @@
 const useAuth = () =>{
-
-    type Headers = {
-        [k: string]: string | number,
-        Authorization: string
-    }
-
-    const headers = useRequestHeaders(['cookie']) as Headers
+    
+    const token = useCookie('Authorization')
 
     const verify = () => {
-        if(!headers.Authorization) return false
+        if(!token.value) return false
         return true
     }
 
