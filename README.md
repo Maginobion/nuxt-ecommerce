@@ -1,6 +1,10 @@
-# Nuxt 3 e-commerce which was developed for a university project
+# Nuxt 3 e-commerce
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+This project was developed for a university project.
+
+Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more
+
+Nuxt is an awesome framework that can do the work really quick and has native type-safety, check it out!
 
 ## Setup
 
