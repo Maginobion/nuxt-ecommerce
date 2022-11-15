@@ -2,14 +2,11 @@
     <div v-if="!pending && product">
         <p>{{product.description}}</p>    
         <p>{{product.name}}</p>
+        <button>Agregar al carrito</button>
     </div>
 </template>
 
 <script setup lang="ts">
-
-    definePageMeta({
-        key: route => route.params.id as string
-    })
 
     const route = useRoute()
 

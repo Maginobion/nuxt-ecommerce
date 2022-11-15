@@ -15,15 +15,8 @@
             </div>
             <div class="buttons">
                 <div class="login">
-                    <!-- <i class="fa-solid fa-user"></i>
-                    <DropdownUser>
-                        <template #trigger>
-                            <slot name="loginname"></slot>
-                        </template>
-                        <template #content>
-                            <slot name="dropcontent"></slot>
-                        </template>
-                    </DropdownUser> -->
+                    <button v-if="isAuth" @click="logout">Cerrar sesión</button>
+                    <NuxtLink v-else to="/auth/login">Login</NuxtLink>
                 </div>
                 <!-- <button class="shopping-cart">
                     <router-link :to="{name:'listaSeleccion'}">
@@ -52,6 +45,15 @@
 </template>
 
 <script setup lang="ts">
+
+    const isAuth = useAuth()
+    
+    const logout = () =>{
+        isAuth.value = false
+        const token = useCookie<string|null>('Authorization')
+        token.value = null
+        navigateTo('/')
+    }
 
     const loading = ref(false)
     

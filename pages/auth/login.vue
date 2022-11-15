@@ -22,6 +22,7 @@
 
             <input type="submit" value="Siguiente">
         </form>
+        <p>¿No tienes una cuenta?</p><NuxtLink to="/auth/register">Regístrate</NuxtLink>
     </div>   
 </template>
 

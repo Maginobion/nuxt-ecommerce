@@ -86,6 +86,10 @@
 
 <script setup lang="ts">
 
+    definePageMeta({
+        middleware: 'auth'
+    })
+
     const imagen = ref<File | undefined>()
 
     const {data:categories, pending} = await useFetch('/api/categories/all')

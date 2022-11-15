@@ -8,7 +8,5 @@ export default defineEventHandler(async (event)=>{
 
     const products = await Product.find(query)
 
-    console.log(products)
-
     return products
 })
