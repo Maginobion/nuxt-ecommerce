@@ -5,10 +5,20 @@ export default defineEventHandler(async (event)=>{
 
     const { user, pass } = await readBody(event)
 
+    if(!user || !pass){
+        return { 
+            status: false,
+            msg: 'No se han ingresado todos los campos.' 
+        }
+    }
+
     const res = await User.makeValidation(user,pass)
 
     if(!res.name){
-        return { status: false }
+        return { 
+            status: false, 
+            msg: 'Usuario o contraseña incorrectos.'
+        }
     }
 
     const token = jwt.sign({

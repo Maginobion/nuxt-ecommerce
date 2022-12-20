@@ -5,6 +5,14 @@ interface IUserDocument extends Document {
     name: string;
     pass: string;
     email: string;
+    cart: {
+        items: {
+            productId: string,
+            quantity: number
+        }[];
+        total_price: number
+    };
+    addToCart: (a:number)=>void
 }
 
 interface IUserModel extends Model<IUserDocument> {

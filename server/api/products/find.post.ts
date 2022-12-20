@@ -2,9 +2,11 @@ import Product from "~~/server/db/models/product"
 
 export default defineEventHandler(async (event)=>{
 
-    const receivedData = await readBody(event)
+    const queries = getQuery(event)
 
-    const test = await Product.find({name: receivedData})
+    const regex = new RegExp(`${queries.text}`, "i")
+
+    const test = await Product.find({name: regex })
 
     console.log(test)
 

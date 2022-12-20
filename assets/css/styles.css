@@ -1,31 +1,31 @@
 :root {
-    --color: #264653;
-    --color-primary: #2A9D8F;
-    --color-secondary: #E9C46A;
-    --bg: #f9c74f;
-    --bg-secondary: #F4A261;
-    --bg-auxiliary: #E76F51;
-    --border-color: #ddd;
-    --glow: rgb(78, 39, 235);
-    --error-color: rgb(237, 38, 38);
-    --success-color: rgb(75, 229, 75);
+  --color: #264653;
+  --color-primary: #2A9D8F;
+  --color-secondary: #E9C46A;
+  --bg: #f9c74f;
+  --bg-secondary: #F4A261;
+  --bg-auxiliary: #E76F51;
+  --border-color: #ddd;
+  --glow: rgb(78, 39, 235);
+  --error-color: rgb(237, 38, 38);
+  --success-color: rgb(75, 229, 75);
 }
 
 .dark-mode {
-    --color: #ebf4f1;
-    --color-primary: #41b38a;
-    --color-secondary: #fdf9f3;
-    --bg: #091a28;
-    --bg-secondary: #0d2133;
-    --bg-auxiliary: rgb(51, 98, 89);
-    --border-color: #0d2538;
-    --glow: greenyellow;
-    --error-color: rgb(237, 38, 38);
-    --success-color: lightgreen;
+  --color: #ebf4f1;
+  --color-primary: #41b38a;
+  --color-secondary: #fdf9f3;
+  --bg: #091a28;
+  --bg-secondary: #0d2133;
+  --bg-auxiliary: rgb(51, 98, 89);
+  --border-color: #0d2538;
+  --glow: greenyellow;
+  --error-color: rgb(237, 38, 38);
+  --success-color: lightgreen;
 }
 
 a {
-    color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 body{

@@ -1,0 +1,38 @@
+<template>
+    <div class="productCard">
+        <p>{{product.name}}</p>
+        <p>S/.{{product.price}}</p>
+        <NuxtLink :to="'productos/'+product._id">Ver producto</NuxtLink>
+    </div>
+</template>
+
+<script setup>
+    defineProps(['product'])
+</script>
+
+<style scoped>
+.productCard{
+    background-color: var(--bg-secondary);
+    padding: 10px 14px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.productCard p{
+    color: var(--color);
+}
+
+a{
+    margin-top: auto;
+    color: var(--color-primary);
+    width: 100%;
+    text-decoration: none;
+    background-color: aquamarine;
+    padding: 4px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    text-align: center;
+}
+
+</style>

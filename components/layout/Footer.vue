@@ -27,12 +27,11 @@
             <div class="content-foo">
                 <h1>Categorías</h1>
                 <p>Los mas vendidos</p>
-                <p>Novedades</p>
-                <p>Ficcion</p>
-                <p>No ficcion</p>
-                <p>Infantil</p>
-                <p>Juvenil</p>
-                <p>Smartplay</p>
+                <p>Limpieza</p>
+                <p>Moda</p>
+                <p>Golosinas</p>
+                <p>Pastelería</p>
+                <p>Frutas</p>
             </div>
             
             <div class="content-foo">
@@ -41,7 +40,7 @@
                 <p>918-500700</p>
                 <p>(llamadas y WhatsApp)</p>
                 <p>(Lun-Sab 9 a.m a 5 p.m)</p>
-                <p>soporte@lamancha.com.pe</p>
+                <p>soporte@bdgkaren.com.pe</p>
                 <p>Comprobante electrónico</p>
             </div>
             <div class="content-foo">
@@ -79,7 +78,6 @@
     padding-top: 15px;
     border-top: 5px solid #4e96a8;
     margin-top: 20px;
-   
   }
   
   .contenedor-footer{

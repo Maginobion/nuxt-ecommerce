@@ -1,13 +1,10 @@
 <template>
     <div>
         <h1>Home</h1>
-        <div class="productGrid">
-            <div class="productCard" v-for="product in products">
-                <p>{{product.name}}</p>
-                <p>S/.{{product.price}}</p>
-                <NuxtLink :to="'productos/'+product._id">Ver producto</NuxtLink>
-            </div>
-        </div>       
+        <ProductGrid 
+            v-if="products"
+            :products="products"
+        />   
     </div>
 </template>
 
@@ -18,33 +15,9 @@
 </script>
 
 <style scoped>
-.productGrid{
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 10px;
-}
-.productCard{
-    background-color: var(--bg-secondary);
-    padding: 10px 14px;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-}
 
-.productCard p{
-    color: var(--color);
-}
-
-a{
-    margin-top: auto;
+h1{
     color: var(--color-primary);
-    width: 100%;
-    text-decoration: none;
-    background-color: aquamarine;
-    padding: 4px;
-    box-sizing: border-box;
-    border-radius: 4px;
-    text-align: center;
 }
+
 </style>

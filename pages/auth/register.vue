@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>Login</p>
+        <h1>Registro</h1>
         <form v-on:submit="register" action="">
 
             <label for="email" class="form-label">Correo electrónico:</label>
@@ -39,6 +39,8 @@
                 required
             >
 
+            <p class="err" v-if="error">{{error}}</p>
+
             <input type="submit" value="Siguiente">
         </form>
     </div>   
@@ -50,6 +52,8 @@
         middleware: 'is-guest'
     })
 
+    const error = ref('')
+
     const register = async (e:Event) =>{
 
         e.preventDefault()
@@ -60,15 +64,74 @@
 
         const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
 
-        const res = await $fetch('/api/auth/signup',{
+        const { status, msg } = await $fetch('/api/auth/signup',{
             method: 'POST',
             body: formProps
         })
+        
+        if(status){
+            const auth = useAuth()
+            auth.value = true
+            navigateTo('/')
+        }
 
-        console.log(res)
+        if (!status && msg) {
+            ponerErrores(msg)
+        }
+    }
+    const ponerErrores = (err: string) =>{
+        error.value = err
+        setTimeout(()=>{
+            error.value=''
+        },4000)
     }
 </script>
 
 <style scoped>
+
+h1{
+    text-align: center;
+    color: var(--color-secondary);
+}
+
+form{
+    min-width: 400px;
+    background-color: var(--bg);
+    padding: 3rem 2rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+form input{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.2rem 0.4rem;
+}
+
+.err{
+    color: var(--error-color);
+    animation: appear 4s ease-in-out;
+    max-height: 0;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@keyframes appear{
+    0%{
+        max-height: 0;
+        max-width: 0;
+    }
+    30%{
+        max-width: 600px;
+        max-height: 100px;
+    }
+    100%{
+        max-height: 0;
+        max-width: 0;
+    }
+}
 
 </style>

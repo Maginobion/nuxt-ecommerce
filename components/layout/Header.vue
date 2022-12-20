@@ -15,7 +15,7 @@
             </div>
             <div class="buttons">
                 <div class="login">
-                    <button v-if="isAuth" @click="logout">Cerrar sesión</button>
+                    <button class="logout" v-if="isAuth" @click="logout">Cerrar sesión</button>
                     <NuxtLink v-else to="/auth/login">Login</NuxtLink>
                 </div>
                 <!-- <button class="shopping-cart">
@@ -29,6 +29,7 @@
             <ul v-if="!loading">
                 <NuxtLink to="/">Home</NuxtLink>
                 <NuxtLink to="/productos/add">Agregar</NuxtLink>
+                <NuxtLink to="/cart">Mi carrito</NuxtLink>
                 <NuxtLink to="/order-history">Historial de compras</NuxtLink>
                 <!-- <Header-links routing="/atencion-cliente" text="Atencion"/>
                 <Header-links routing="/adduser" text="Mi Perfil"/>              
@@ -56,20 +57,24 @@
     const loading = ref(false)
     
     const find = async (e:Event) =>{
+
         e.preventDefault()
         const formData = new FormData(e.target as HTMLFormElement) 
         const formProps = Object.fromEntries(formData)
 
-        console.log(formProps)
-
-        const res = await $fetch<{res:string}>('/api/products/find',{
-            method: 'POST',
-            body: formProps
-        })
-
-        if(res){
-            navigateTo('productos/'+formProps.text)
+        if(!formProps.text){
+            await navigateTo('/')
         }
+
+        else await navigateTo({
+            path: '/productos/search',
+            query:{
+                text: formProps.text as string
+            },
+        }, {
+            replace: true,
+
+        })
     }
 
 </script>
@@ -122,13 +127,23 @@ img {
     border-radius: .5rem;
 }
 
+form{
+    display: flex;
+}
+
+input[type="text"]{
+    border: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 input {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     padding: .5rem 1rem;
     font-size: 1.125rem;
     border: none;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
     outline: none;
 }
 
@@ -163,7 +178,12 @@ i {
     cursor: pointer;
     background: transparent;
 }
-
+.logout{
+    border: 0;
+    background-color: var(--bg-secondary);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
 
 .buttons .shopping-cart {
     display: flex;
