@@ -103,7 +103,9 @@
 
     const disabled = ref<boolean>(false)
 
-    const {data:categories, pending} = await useFetch('/api/categories/all')
+    const client = useSupabase()
+
+    const {data:categories, pending, refresh} = await useFetch('/api/categories/all')
 
     const getImage = (e:Event) => {
         const target = e.target as HTMLInputElement
@@ -120,41 +122,39 @@
         
         const formData = new FormData(values)
 
-        formData.append('image', imagen.value as File)
+        if(!imagen.value){
+            console.log('xd')
+            return
+        }
+        
+        const { data, error } = await client
+        .storage
+        .from('ecommerce-bucket')
+        .upload(new Date().toISOString(), imagen.value, {
+            cacheControl: '3600',
+            upsert: false,
+        })
 
-        // const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
+        formData.append('image', data?.path as string)
 
-        // Object.keys(formProps).forEach(key=>{
-        //     formProps[key] = String(formProps[key]).trim()      
-        // })
+        console.log([...formData])
 
-        // if(
-        //     String(formProps.name).length < 4 || 
-        //     String(formProps.description).length < 4 || 
-        //     formProps.quantity < 0 || 
-        //     formProps.price < 2 ||
-        //     formProps.image===undefined
-        // ){
-        //     console.log('Debe ingresar valores adecuados a los campos')
-        // }
-        // else if(
-        //     Number(formProps.quantity)<0 ||
-        //     Number(formProps.price)<0
-        // ){
-        //     console.log('pon valores reales')
-        // }
-        // else{      
-            uploadData(formData)
+        const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
+
+        console.log(formProps)
+
+        uploadData(formProps) 
+            
         // }          
     }
 
-    const uploadData = async (data: FormData) =>{
+    const uploadData = async (data: object) =>{
 
         const res = await $fetch('/api/products/add',{
             method: 'POST',
             body: data,
-            headers: { 'Content-Disposition': 'form-data' }
-        })
+        })   
+        
         console.log(res)
     }
 
@@ -174,6 +174,7 @@
         if(res.res===true){
             mensajes.value='Categoría registrada con éxito.'
             disabled.value=true
+            refresh()
         }
     }
 </script>

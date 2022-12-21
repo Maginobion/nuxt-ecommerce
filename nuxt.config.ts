@@ -1,5 +1,8 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+    modules:[
+        '@nuxt/image-edge'
+    ],
     app:{
         pageTransition: { name: 'page', mode: 'out-in' }
     },
@@ -7,9 +10,11 @@ export default defineNuxtConfig({
         shim: false
     },
     runtimeConfig:{
-        mongo: process.env.MONGO_URL,
-        awsKey: process.env.AWS_ACCESS_KEY_ID,
-        awsSecret: process.env.AWS_SECRET_ACCESS_KEY
+        mongo: process.env.MONGO_URL,     
+        public:{
+            supabaseUrl: process.env.SUPABASE_URL,
+            supabasePass: process.env.SUPABASE_PASS,
+        }
     },
-    css: ['@/assets/css/styles.css']
+    css: ['@/assets/css/styles.css'],
 })

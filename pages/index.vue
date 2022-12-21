@@ -4,7 +4,7 @@
         <ProductGrid 
             v-if="products"
             :products="products"
-        />   
+        />  
     </div>
 </template>
 

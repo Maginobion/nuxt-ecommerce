@@ -13,7 +13,10 @@ export default defineEventHandler(async (event)=>{
     const token = getCookie(event, 'Authorization')
 
     if(!token){
-        return { res: 'no hay token ' }
+        return { 
+            status: false,
+            msg: 'No estás logueado' 
+        }
     }
 
     const decoded = jwt.verify(token,'secret') as DecodedCookie

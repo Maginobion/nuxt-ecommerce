@@ -1,5 +1,11 @@
 <template>
     <div class="productCard">
+        <NuxtImg
+            :src="'https://iitabnplpszjflqtozji.supabase.co/storage/v1/object/public/ecommerce-bucket/'+product.image" 
+            alt="img"
+            width="180px"
+            height="200px"
+        />
         <p>{{product.name}}</p>
         <p>S/.{{product.price}}</p>
         <NuxtLink :to="'productos/'+product._id">Ver producto</NuxtLink>

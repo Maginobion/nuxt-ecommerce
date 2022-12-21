@@ -13,29 +13,34 @@ export default defineEventHandler(async (event)=>{
     const token = getCookie(event, 'Authorization')
 
     if(!token){
-        return { 
-            status: false,
-            msg: 'No estás logueado' 
-        }
+        return { res: 'no hay token ' }
     }
 
     const decoded = jwt.verify(token,'secret') as DecodedCookie
 
     if(!decoded){
-        return { 
-            status: false,
-            msg: 'Acceso inválido' 
-        }
+        createError('error de acceso')
+        return {res: 'error de acceso'}
     }
 
     const user = await User.findOne({name: decoded.username})
 
     if(!user){
-        return { 
-            status: false,
-            msg: 'Acceso inválido' 
-        }
+        createError('error de acceso')
+        return {res: 'error de acceso'}
     }
 
-    return user.cart
+    const { id } = await readBody(event)
+    
+    console.log(id)
+    
+    user.cart.items = user.cart.items.filter((a)=>a.productId.toString()!==id)
+
+    console.log(user.cart.items)
+
+    user.save()
+
+    return {
+        status: true
+    }
 })

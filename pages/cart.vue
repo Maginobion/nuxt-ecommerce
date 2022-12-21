@@ -2,7 +2,7 @@
     <div>
         <h1>Carrito</h1>
         <div v-if="pending">Cargando...</div>
-        <table v-else-if="cart">
+        <table v-else-if="cart?.items?.length">
             <thead>
                 <th>Producto</th>
                 <th>Cantidad</th>
@@ -14,7 +14,7 @@
                     <td>{{ item.productName }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>{{ item.total_price }}</td>
-                    <td><button>Quitar {{ item.productId }}</button></td>
+                    <td><button @click="remove(item.productId)">Quitar {{ item.productId }}</button></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -37,11 +37,19 @@ definePageMeta({
 
 const headers = useRequestHeaders(['cookie'])
 
-const { data:cart, pending } = await useFetch<{items:{productId:string, quantity: number, total_price:number, productName: string}[]}>('/api/cart/get-products',{
+const { data:cart, pending, refresh } = await useFetch<{items:{productId:string, quantity: number, total_price:number, productName: string}[]}>('/api/cart/get-products',{
     method: 'post',
     server: false,
     headers: headers as HeadersInit,
 })
+
+const remove = async (productId:string) => {
+    const { status } = await $fetch('/api/cart/delete-product',{
+        method:'POST',
+        body: { id: productId }
+    })
+    status && refresh()
+}
 
 const total = computed(()=>cart.value?.items.reduce((prev,curr)=> prev + curr.total_price, 0))
 
