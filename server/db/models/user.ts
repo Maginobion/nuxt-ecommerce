@@ -17,8 +17,9 @@ interface IUserDocument extends Document {
 }
 
 interface IUserModel extends Model<IUserDocument> {
-    makeValidation: (a:string, b:string) => Promise<IUserDocument & {
-        _id: Types.ObjectId;
+    makeValidation: (a:string, b:string) => Promise<{
+        status: Boolean
+        user: IUserDocument & {_id: Types.ObjectId;}
     }>;
 }
 

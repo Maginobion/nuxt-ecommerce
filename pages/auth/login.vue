@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Login</h1>
-        <p v-if="query.msg" class="sysMsg">{{ query.msg }}</p>
+        <p v-if="query.err" class="sysMsg">{{ query.err }}</p>
         <form v-on:submit="login" action="">
             <label for="username" class="form-label">Username:</label>
             <input 
@@ -24,7 +24,7 @@
             <p class="err" v-if="error">{{error}}</p>
             <input type="submit" value="Siguiente">
         </form>
-        <p>¿No tienes una cuenta? <NuxtLink to="/auth/register">Regístrate</NuxtLink></p>
+        <p>¿No tienes una cuenta? <NuxtLink to="/auth/registro">Regístrate</NuxtLink></p>
     </div>   
 </template>
 
@@ -56,7 +56,12 @@
         if(res.status){
             const auth = useAuth()
             auth.value = true
-            navigateTo('/')
+            navigateTo({
+                path: '/',
+                query:{
+                    msg:"Autenticación exitosa"
+                }
+            })
         }
         else if (res.msg){
             ponerErrores(res.msg)
@@ -104,7 +109,7 @@ form input{
 
 .err{
     color: var(--error-color);
-    animation: appear 0.4s ease-in-out;
+    animation: appear 4s ease-in-out;
     overflow: hidden;
     white-space: nowrap;
 }

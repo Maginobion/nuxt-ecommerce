@@ -99,7 +99,10 @@ userSchema.statics.makeValidation = async (name, pass) => {
         }
     }
     
-    return user
+    return {
+        status: true,
+        user: user
+    }
 }
 
 userSchema.methods.addToCart = async function(productId: number) {

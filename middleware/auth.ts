@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to,from)=>{
         return navigateTo({
             path: '/auth/login',
             query:{
-                msg:"Acceso inválido"
+                err:"Acceso inválido"
             }
         })
     }

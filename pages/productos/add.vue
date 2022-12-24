@@ -66,6 +66,8 @@
                 required
             >
 
+            <p class="err" v-if="error">{{error}}</p>
+
             <input type="submit" class="btn-submit" value="Confirmar"><br> <br> 
         </form>
         <form v-on:submit="submitCategoryForm" class="form" enctype="multipart/form-data">
@@ -102,6 +104,8 @@
 
     const mensajes = ref<boolean | string>('')
 
+    const error = ref('')
+
     const disabled = ref<boolean>(false)
 
     const client = useSupabase()
@@ -136,15 +140,9 @@
 
         formData.append('image', data?.path as string)
 
-        console.log([...formData])
-
         const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
 
-        console.log(formProps)
-
-        uploadData(formProps) 
-            
-        // }          
+        uploadData(formProps)      
     }
 
     const uploadData = async (data: object) =>{
@@ -154,7 +152,24 @@
             body: data,
         })   
         
-        console.log(res)
+        if(res.status){
+            navigateTo({
+                path: '/',
+                query:{
+                    msg:"Producto añadido"
+                }
+            })
+        }
+        else if (res.msg){
+            ponerErrores(res.msg)
+        }
+    }
+
+    const ponerErrores = (err: string) =>{
+        error.value = err
+        setTimeout(()=>{
+            error.value=''
+        },4000)
     }
 
     const submitCategoryForm = async (e:Event) => {
@@ -249,6 +264,29 @@
     cursor: pointer;
     transition: all .5s ease;
 }
+
+.err{
+    color: var(--error-color);
+    animation: appear 4s ease-in-out both;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@keyframes appear{
+    0%{
+        max-height: 0;
+        max-width: 0;
+    }
+    30%{
+        max-width: 600px;
+        max-height: 100px;
+    }
+    100%{
+        max-height: 0;
+        max-width: 0;
+    }
+}
+
 
 .btn-submit:disabled {
     background-color: gray;

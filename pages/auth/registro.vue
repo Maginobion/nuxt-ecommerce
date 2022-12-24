@@ -72,7 +72,12 @@
         if(status){
             const auth = useAuth()
             auth.value = true
-            navigateTo('/')
+            navigateTo({
+                path: '/',
+                query:{
+                    msg:"Registro exitoso"
+                }
+            })
         }
 
         if (!status && msg) {

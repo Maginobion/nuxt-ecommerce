@@ -5,7 +5,7 @@ export default defineEventHandler(async (event)=>{
 
     const { email, name, pass, rePass } = await readBody(event)
 
-    if(!email || !pass || !name || !rePass){
+    if(!email.trim() || !pass.trim() || !name.trim() || !rePass.trim()){
         return { 
             status: false,
             msg: 'No se han ingresado todos los campos.' 
@@ -13,28 +13,28 @@ export default defineEventHandler(async (event)=>{
     }
 
     const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    if(!emailRegex.test(email)){
+    if(!emailRegex.test(email.trim())){
         return { 
             status: false,
             msg: 'Ingrese un correo válido.' 
         }
     }
 
-    if(pass.length < 5){
+    if(pass.trim().length < 4 && name.trim().length < 4){
         return {
             status: false,
-            msg: 'La contraseña debe ser de al menos 5 caracteres.' 
+            msg: 'El usuario y/o contraseña deben ser de al menos 5 caracteres.' 
         }
     }
 
-    if(pass !== rePass){
+    if(pass.trim() !== rePass.trim()){
         return { 
             status: false,
             msg: 'Las contraseñas no coinciden.' 
         }
     }
 
-    const existingEmail = await User.findOne({email:email})
+    const existingEmail = await User.findOne({email:email.trim()})
 
     if(existingEmail){
         return { 
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    const existingUsername = await User.findOne({name:name})
+    const existingUsername = await User.findOne({name:name.trim()})
 
     if(existingUsername){
         return { 
@@ -53,9 +53,9 @@ export default defineEventHandler(async (event)=>{
     }
 
     const newUser = await User.create({
-        name: name,
-        email: email,
-        pass: pass
+        name: name.trim(),
+        email: email.trim(),
+        pass: pass.trim()
     })
 
     const token = jwt.sign({

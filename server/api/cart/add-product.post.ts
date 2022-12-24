@@ -19,10 +19,13 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    const decoded = jwt.verify(token,'secret') as DecodedCookie
+    let decoded
 
-    if(!decoded){
-        createError('error de acceso')
+    try{
+        decoded = jwt.verify(token,'secret') as DecodedCookie
+    }
+    
+    catch{
         return { 
             status: false,
             msg: 'Acceso inválido' 

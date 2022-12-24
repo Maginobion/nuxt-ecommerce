@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to,from)=>{
         return navigateTo({
             path: '/',
             query:{
-                msg:"Ya estás logueado"
+                err:"Ya estás logueado"
             }
         })
     }

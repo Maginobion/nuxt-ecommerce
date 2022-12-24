@@ -14,16 +14,16 @@ export default defineEventHandler(async (event)=>{
 
     const { user, pass } = await readBody(event)
 
-    if(!user || !pass){
+    if(!(user.length>4) || !(pass.length>4)){
         return { 
             status: false,
-            msg: 'No se han ingresado todos los campos.' 
+            msg: 'Los datos son inválidos.' 
         }
     }
 
-    const res = await User.makeValidation(user,pass)
+    const { status, user: validUser } = await User.makeValidation(user,pass)
 
-    if(!res.name){
+    if(!status){
         return { 
             status: false, 
             msg: 'Usuario o contraseña incorrectos.'
@@ -32,8 +32,8 @@ export default defineEventHandler(async (event)=>{
 
     const token = jwt.sign({
         exp: Math.floor(Date.now()/1000)+ 60*60*24*15,
-        email: res.email,
-        username: res.name,
+        email: validUser.email,
+        username: validUser.name,
     },'secret')
 
     setCookie(event,'Authorization',token,{
