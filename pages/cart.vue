@@ -14,7 +14,7 @@
                     <td>{{ item.productName }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>{{ item.total_price }}</td>
-                    <td><button @click="remove(item.productId)">Quitar {{ item.productId }}</button></td>
+                    <td><button @click="remove(item.productId)">Quitar</button></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -23,7 +23,7 @@
                 </tr>
             </tbody>
             
-            <button>Comprar!</button>
+            <NuxtLink to="/comprar">Comprar!</NuxtLink >
         </table>
         <p v-else>Aun no agregas nada al carrito</p>
     </div>

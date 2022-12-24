@@ -1,4 +1,5 @@
 import User from "../../db/models/user"
+import Invoice from "~~/server/db/models/invoice"
 import jwt from 'jsonwebtoken'
 
 type DecodedCookie = {
@@ -23,28 +24,28 @@ export default defineEventHandler(async (event)=>{
 
     if(!decoded){
         createError('error de acceso')
-        return { 
-            status: false,
-            msg: 'Acceso inválido' 
-        }
+        return {res: 'error de acceso'}
     }
 
     const user = await User.findOne({name: decoded.username})
 
     if(!user){
         createError('error de acceso')
-        return { 
-            status: false,
-            msg: 'Acceso inválido' 
-        }
+        return {res: 'error de acceso'}
     }
 
-    const { id }:{ id:number } = await readBody(event)
+    const invoice = new Invoice({
+        invoiceNumber: 123456789,
+        userId:user._id,
+        items: user.cart.items,
+        total_price: user.cart.items.reduce((prev,curr)=> prev + curr.total_price, 0)
+    })
 
-    user.addToCart(id)
+    console.log(invoice)
+
+    // invoice.save()
 
     return{
-        status: true,
         newCart: user.cart
     }
 })

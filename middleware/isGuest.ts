@@ -4,6 +4,11 @@ export default defineNuxtRouteMiddleware((to,from)=>{
 
     if(auth.value){
         console.log(auth)
-        return navigateTo('/')
+        return navigateTo({
+            path: '/',
+            query:{
+                msg:"Ya estás logueado"
+            }
+        })
     }
 })

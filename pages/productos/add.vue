@@ -47,6 +47,7 @@
                 type="number" 
                 id="precio"
                 value="0"
+                min="0"
                 class="form-input" 
                 name="price" 
                 placeholder="Ingrese el precio"
@@ -58,6 +59,7 @@
                 type="number" 
                 id="cantidad"
                 value="0"
+                min="0"
                 class="form-input" 
                 name="quantity" 
                 placeholder="Ingrese la cantidad"
@@ -87,7 +89,6 @@
             >
             {{mensajes}}
         </form>
-        <button @click="wtf">dirname?</button>
     </div>
 </template>
 
@@ -111,8 +112,6 @@
         const target = e.target as HTMLInputElement
         imagen.value = target.files?.[0]
     }
-
-    const wtf = () => console.log(imagen.value)
 
     const submitProductForm = async (e:Event) =>{
 

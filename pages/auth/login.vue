@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>Login</h1>
+        <p v-if="query.msg" class="sysMsg">{{ query.msg }}</p>
         <form v-on:submit="login" action="">
             <label for="username" class="form-label">Username:</label>
             <input 
@@ -28,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+
+    const { query } = useRoute()
 
     definePageMeta({
         middleware: 'is-guest'
@@ -69,6 +72,14 @@
 </script>
 
 <style scoped>
+
+.sysMsg{
+    background-color: var(--error-color);
+    padding: 0.4em 1em;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+}
 
 h1{
     text-align: center;

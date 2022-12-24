@@ -4,6 +4,11 @@ export default defineNuxtRouteMiddleware((to,from)=>{
 
     if(!auth.value){
         console.log(auth)
-        return navigateTo('/auth/login')
+        return navigateTo({
+            path: '/auth/login',
+            query:{
+                msg:"Acceso inválido"
+            }
+        })
     }
 })

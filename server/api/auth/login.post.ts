@@ -3,6 +3,15 @@ import jwt from 'jsonwebtoken'
 
 export default defineEventHandler(async (event)=>{
 
+    const browserToken = getCookie(event, 'Authorization')
+
+    if(browserToken){
+        return { 
+            status: false,
+            msg: 'Ya estás logueado' 
+        }
+    }
+
     const { user, pass } = await readBody(event)
 
     if(!user || !pass){

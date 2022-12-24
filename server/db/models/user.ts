@@ -7,10 +7,11 @@ interface IUserDocument extends Document {
     email: string;
     cart: {
         items: {
+            total_price: number;
             productId: string,
+            productName: string,
             quantity: number
         }[];
-        total_price: number
     };
     addToCart: (a:number)=>void
 }
