@@ -25,7 +25,8 @@ export default defineEventHandler(async (event)=>{
         decoded = jwt.verify(token,'secret') as DecodedCookie
     }
     
-    catch{
+    catch (err){
+        console.log('Error en addproduct')
         return { 
             status: false,
             msg: 'Acceso inválido' 
@@ -44,7 +45,7 @@ export default defineEventHandler(async (event)=>{
 
     const { id }:{ id:number } = await readBody(event)
 
-    user.addToCart(id)
+    await user.addToCart(id)
 
     return{
         status: true,

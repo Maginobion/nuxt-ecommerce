@@ -1,6 +1,6 @@
-import { model } from "mongoose";
+import mongoose, { model } from "mongoose";
 import invoiceSchema from "../schema/invoice";
 
-const Invoice = model('Invoice', invoiceSchema)
+const Invoice = mongoose.models.Invoice || model('Invoice', invoiceSchema)
 
 export default Invoice

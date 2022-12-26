@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>Carrito</h1>
+        <p v-if="message" class="sysMsg">{{ message }}</p>
         <div v-if="pending">Cargando...</div>
         <table v-else-if="cart?.items?.length">
             <thead>
@@ -25,7 +26,11 @@
             
             <NuxtLink to="/comprar">Comprar!</NuxtLink >
         </table>
-        <p v-else>Aun no agregas nada al carrito</p>
+        <div class="empty" v-else>
+            <p>Aun no agregas nada al carrito</p>
+            <p>Los productos que agregues se mostrarán aquí</p>
+            <NuxtLink to="/">Volver al home</NuxtLink>
+        </div>
     </div>
 </template>
 
@@ -35,12 +40,17 @@ definePageMeta({
     middleware: 'auth'
 })
 
+const { query } = useRoute()
+
+const message = computed(()=>query.err)
+
 const headers = useRequestHeaders(['cookie'])
 
 const { data:cart, pending, refresh } = await useFetch<{items:{productId:string, quantity: number, total_price:number, productName: string}[]}>('/api/cart/get-products',{
     method: 'post',
     server: false,
     headers: headers as HeadersInit,
+    cache: 'no-cache'
 })
 
 const remove = async (productId:string) => {
@@ -71,4 +81,34 @@ table th{
 table td{
     padding: 0.4rem;
 }
+.empty{
+    height: 30vh;
+    padding-bottom: 4vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.empty a{
+    margin-top: 20px;
+    color: var(--color-primary);
+    text-decoration: none;
+    background-color: aquamarine;
+    padding: 4px 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    text-align: center;
+}
+.empty a:hover{
+    background-color: rgb(128, 241, 204);
+}
+
+.sysMsg{
+    background-color: var(--error-color);
+    padding: 0.4em 1em;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+}
+
 </style>

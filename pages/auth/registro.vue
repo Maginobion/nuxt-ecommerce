@@ -23,7 +23,8 @@
 
             <label for="contra" class="form-label">Contraseña:</label>
             <input 
-                class="form-input" 
+                class="form-input"
+                type="password"
                 name="pass" 
                 id="contra" 
                 placeholder="Ingrese su contraseña"
@@ -32,7 +33,8 @@
 
             <label for="reContra" class="form-label">Repetir contraseña:</label>
             <input 
-                class="form-input" 
+                class="form-input"
+                type="password" 
                 name="rePass" 
                 id="reContra" 
                 placeholder="Ingrese su contraseña nuevamente"

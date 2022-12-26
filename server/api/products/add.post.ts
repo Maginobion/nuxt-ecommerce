@@ -1,5 +1,5 @@
 import Product from "~~/server/db/models/product"
-import CategoryModel from "~~/server/db/models/category"
+import Category from "~~/server/db/models/category"
 import jwt from 'jsonwebtoken'
 
 type DecodedCookie = {
@@ -54,7 +54,16 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    const category = await CategoryModel.findOne({_id:Category})
+    const product = await Product.findOne({name: name})
+
+    if(product){
+        return { 
+            status: false,
+            msg: 'Ya existe un producto con este nombre' 
+        }
+    }
+
+    const category = await Category.findOne({_id:Category})
 
     if(!category){
         return { 

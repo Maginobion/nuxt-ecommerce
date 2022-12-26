@@ -1,6 +1,6 @@
-import { model } from "mongoose";
+import mongoose, { model } from "mongoose";
 import productSchema from "../schema/product";
 
-const Product = model('Product', productSchema)
+const Product = mongoose.models.Product || model('Product', productSchema)
 
 export default Product

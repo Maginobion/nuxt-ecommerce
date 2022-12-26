@@ -91,13 +91,33 @@
             >
             {{mensajes}}
         </form>
+        <table v-if="!userPending">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user in users?.users">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <p v-if="user.role===2">SuperAdmin</p>
+                        <button v-else-if="user.role===1" @click="removeAdmin(user._id)">Remover admin</button>
+                        <button v-else @click="giveAdmin(user._id)">Otorgar admin</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
 <script setup lang="ts">
 
     definePageMeta({
-        middleware: 'auth'
+        middleware: ['auth', 'is-admin']
     })
 
     const imagen = ref<File | undefined>()
@@ -111,6 +131,29 @@
     const client = useSupabase()
 
     const {data:categories, pending, refresh} = await useFetch('/api/categories/all')
+
+    const headers = useRequestHeaders(['cookie'])
+
+    const {data:users, pending: userPending, refresh: userRefresh} = await useFetch('/api/users/getAll',{
+        method: 'post',
+        headers: headers as HeadersInit
+    })
+
+    const giveAdmin = async (id: string) =>{
+        const res = await $fetch('/api/users/makeAdmin',{
+            method: 'post',
+            body: { id: id }
+        })
+        userRefresh()
+    }
+
+    const removeAdmin = async (id: string) =>{
+        const res = await $fetch('/api/users/removeAdmin',{
+            method: 'post',
+            body: { id: id }
+        })
+        userRefresh()
+    }
 
     const getImage = (e:Event) => {
         const target = e.target as HTMLInputElement

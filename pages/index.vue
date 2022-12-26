@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pageCont">
         <p v-if="query.err" class="errMsg">{{ query.err }}</p>
         <p v-if="query.msg" class="successMsg">{{ query.msg }}</p>
         <h1>Home</h1>
@@ -19,7 +19,9 @@
 </script>
 
 <style scoped>
-
+.pageCont{
+    width: 100%
+}
 .errMsg{
     background-color: var(--error-color);
     padding: 0.4em 1em;
@@ -36,6 +38,7 @@
 }
 
 h1{
+    text-align: center;
     color: var(--color-primary);
 }
 

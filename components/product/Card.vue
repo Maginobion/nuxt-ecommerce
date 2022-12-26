@@ -28,6 +28,9 @@
 .productCard p{
     color: var(--color);
 }
+.productCard img{
+    margin: auto;
+}
 
 a{
     margin-top: auto;

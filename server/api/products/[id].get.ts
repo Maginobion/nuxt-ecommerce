@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken'
 import Product from '~~/server/db/models/product'
 
 export default defineEventHandler(async (event)=>{

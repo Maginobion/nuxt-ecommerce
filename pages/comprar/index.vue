@@ -1,131 +1,119 @@
 <template>
     <div>
         <h1>Datos de facturación</h1>
-        <form v-on:submit="submitProductForm" class="form" enctype="multipart/form-data">
-            <label for="titulo" class="form-label">Nombre completo:</label>
+        <form v-on:submit="confirmarCompra" class="form" enctype="multipart/form-data">
+            <label for="fullName" class="form-label">Nombre completo:</label>
             <input 
                 type="text" 
-                id="titulo" 
+                id="fullName" 
                 class="form-input" 
-                name="name" 
+                name="fullName" 
                 placeholder="Ingrese el nombre del producto"
                 required
             >
 
-            <label for="descripcion" class="form-label">DNI:</label>
+            <label for="DNI" class="form-label">DNI:</label>
             <input 
-                class="form-input" 
-                name="description" 
-                id="descripcion" 
+                class="form-input"
+                type="number"
+                name="DNI" 
+                id="DNI" 
                 placeholder="Ingrese su descripción"
                 required
             >
 
-            <label for="descripcion" class="form-label">Teléfono:</label>
+            <label for="phone" class="form-label">Teléfono:</label>
             <input 
-                class="form-input" 
-                name="description" 
-                id="descripcion" 
+                class="form-input"
+                type="number"
+                name="phone" 
+                id="phone" 
                 placeholder="Ingrese su descripción"
                 required
             >
 
             <button @click="getPos">Dame mi pos</button>
-            <div class="geo" v-if="lat!=='' && lon!==''">
+            <div class="geo" v-if="lat && lon">
                 <p>Posición:</p>
                 <p>Latitud: {{ lat }}</p>
                 <p>Longitud: {{ lon }}</p>
             </div>
-            
-            <!-- <label for="categoria" class="form-label">Dirección:</label>
-            <input 
-                class="form-input" 
-                name="description" 
-                id="descripcion" 
-                placeholder="Ingrese su descripción"
-                required
-            >
 
-            <label for="precio" class="form-label">Bloque/Dpto/Oficina:</label>
-            <input 
-                class="form-input" 
-                name="description" 
-                id="descripcion" 
-                placeholder="Ingrese su descripción"
-                required
-            >
-
-            <label for="precio" class="form-label">Referencia:</label>
-            <input 
-                class="form-input" 
-                name="description" 
-                id="descripcion" 
-                placeholder="Ingrese su descripción"
-                required
-            >
-
-            <label for="cantidad" class="form-label">Región:</label>
-            <input 
-                type="number" 
-                id="cantidad"
-                value="0"
-                min="0"
-                class="form-input" 
-                name="quantity" 
-                placeholder="Ingrese la cantidad"
-                required
-            >
-
-            <label for="cantidad" class="form-label">Distrito:</label>
-            <input 
-                type="number" 
-                id="cantidad"
-                value="0"
-                min="0"
-                class="form-input" 
-                name="quantity" 
-                placeholder="Ingrese la cantidad"
-                required
-            > -->
-
-            
-
+            <p class="err" v-if="error">{{error}}</p>
             <input type="submit" class="btn-submit" value="Confirmar">
         </form>
         <p>El proceso se llevará a cabo por VISA</p>
-        <button>Continuar</button>
-        
+        <button>Continuar</button>  
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 definePageMeta({
-    middleware: 'auth'
+    middleware: ['auth', 'has-products']
 })
 
-const lat = ref('')
-const lon = ref('')
+const lat = ref()
+const lon = ref()
+const error = ref('')
 
-const confirmarCompra = async () =>{
-    const { status } = await $fetch('/api/cart/buy-products',{
+const fullAddress = computed(()=>{
+    if(lat.value && lon.value) return lat.value+' '+lon.value
+    return ''
+})
+
+const confirmarCompra = async (e: Event) =>{
+
+    e.preventDefault()
+    
+    const values = e.target as HTMLFormElement
+        
+    const formData = new FormData(values)
+
+    formData.append('geoPosition', fullAddress.value)
+
+    const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
+
+    const { status, msg } = await $fetch('/api/cart/buy-products',{
         method:'POST',
+        body: formProps
     })
-    status && refresh()
+    if(!status && msg) ponerErrores(msg) 
+    else navigateTo({
+        path: '/',
+        query:{
+            msg: 'Pedido realizado con éxito. Estaremos en contacto'
+        }
+    })
 }
 
-const getPos = (e) =>{
+const getPos = (e: Event) =>{
     e.preventDefault()
-    const geo = navigator.geolocation.getCurrentPosition((position)=>{
-        console.log(position)
+    navigator.geolocation.getCurrentPosition((position)=>{
         lat.value = position.coords.latitude
         lon.value = position.coords.longitude
     })
 }
 
+const ponerErrores = (err: string) =>{
+    error.value = err
+    setTimeout(()=>{
+        error.value=''
+    },4000)
+}
+
 </script>
 
 <style scoped>
+
+.sysMsg{
+    background-color: var(--error-color);
+    padding: 0.4em 1em;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+}
+
 h1{
     text-align: center;
     color: var(--color-secondary);
@@ -145,6 +133,13 @@ form input{
     box-sizing: border-box;
     padding: 0.2rem 0.4rem;
 }
+.err{
+    color: var(--error-color);
+    animation: appear 4s ease-in-out;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 @keyframes appear{
     0%{
         max-height: 0;
@@ -160,6 +155,6 @@ form input{
     }
 }
 .geo{
-    
+    margin: auto;
 }
 </style>

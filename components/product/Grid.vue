@@ -20,9 +20,13 @@
 <style scoped>
 
 .productGrid{
+    padding: 0 2em;
     display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    justify-self: center;
+    align-items: center;
+    grid-auto-flow: row;
+    grid-auto-columns: 340px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
     gap: 10px;
 }
 

@@ -2,13 +2,33 @@ import { Schema, Types } from 'mongoose'
 
 const invoiceSchema = new Schema({
     invoiceNumber: {
-        type: Number,
+        type: String,
         unique: true,
         required: true
     },
     userId:{
         type: Types.ObjectId,
         ref:'User'
+    },
+    delivered:{
+        type: Boolean,
+        required: true,
+    },
+    fullName:{
+        type: String,
+        required: true
+    },
+    DNI:{
+        type: Number,
+        required: true
+    },
+    phone:{
+        type: Number,
+        required: true
+    },
+    geoPosition:{
+        type: String,
+        required: true
     },
     items:[{
         productId: {

@@ -8,6 +8,13 @@ type DecodedCookie = {
     iat: number
 }
 
+type CartProduct = {
+    total_price: number;
+    productId: string,
+    productName: string,
+    quantity: number
+}
+
 export default defineEventHandler(async (event)=>{
 
     const token = getCookie(event, 'Authorization')
@@ -34,7 +41,7 @@ export default defineEventHandler(async (event)=>{
     
     console.log(id)
     
-    user.cart.items = user.cart.items.filter((a)=>a.productId.toString()!==id)
+    user.cart.items = user.cart.items.filter((a:CartProduct)=>a.productId.toString()!==id)
 
     console.log(user.cart.items)
 

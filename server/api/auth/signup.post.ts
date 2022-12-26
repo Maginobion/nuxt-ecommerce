@@ -55,7 +55,8 @@ export default defineEventHandler(async (event)=>{
     const newUser = await User.create({
         name: name.trim(),
         email: email.trim(),
-        pass: pass.trim()
+        pass: pass.trim(),
+        role: 0
     })
 
     const token = jwt.sign({
