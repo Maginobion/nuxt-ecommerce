@@ -23,6 +23,9 @@ const userSchema = new Schema({
         type: Number,
         required: true,
     },
+    recoveryKey:{
+        type: String
+    },
     cart:{
         items:[{
             productId: {

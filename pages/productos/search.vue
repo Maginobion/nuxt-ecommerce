@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pageCont">
         <h1>Búsqueda: {{query.text}}</h1>
         <ProductGrid 
             v-if="products"
@@ -26,5 +26,9 @@ watch(()=>query, ()=>refresh())
 <style scoped>
 h1{
     color: var(--color-primary);
+    text-align: center;
+}
+.pageCont{
+    width: 100%
 }
 </style>

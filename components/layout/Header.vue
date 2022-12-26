@@ -28,7 +28,7 @@
         <div class="header-bottom">
             <ul v-if="!loading">
                 <NuxtLink to="/">Home</NuxtLink>
-                <NuxtLink to="/productos/add">Agregar</NuxtLink>
+                <NuxtLink to="/admin/dashboard">Agregar</NuxtLink>
                 <NuxtLink to="/cart">Mi carrito</NuxtLink>
                 <NuxtLink to="/order-history">Historial de compras</NuxtLink>
                 <!-- <Header-links routing="/atencion-cliente" text="Atencion"/>

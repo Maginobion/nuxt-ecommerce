@@ -6,6 +6,7 @@ export interface IUserDocument extends Document {
     pass: string;
     email: string;
     role: number;
+    recoveryKey: string;
     cart: {
         items: {
             total_price: number;

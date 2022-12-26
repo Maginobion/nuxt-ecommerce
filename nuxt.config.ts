@@ -10,10 +10,12 @@ export default defineNuxtConfig({
         shim: false
     },
     runtimeConfig:{
-        mongo: process.env.MONGO_URL,     
+        mongo: process.env.MONGO_URL,
+        gmailClient: process.env.GMAIL_CLIENT,
+        gmailSecret: process.env.GMAIL_SECRET,
         public:{
             supabaseUrl: process.env.SUPABASE_URL,
-            supabasePass: process.env.SUPABASE_PASS,
+            supabasePass: process.env.SUPABASE_PASS,           
         }
     },
     css: ['@/assets/css/styles.css'],

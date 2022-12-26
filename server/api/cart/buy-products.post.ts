@@ -1,7 +1,7 @@
 import User from "../../db/models/user"
 import Invoice from "~~/server/db/models/invoice"
 import jwt from 'jsonwebtoken'
-import { Counter } from "~~/server/db/schema/counter"
+import { Counter } from "~~/server/db/models/counter"
 
 type DecodedCookie = {
     exp: number,

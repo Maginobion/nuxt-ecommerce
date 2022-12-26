@@ -1,31 +1,20 @@
 <template>
     <div>
-        <h1>Login</h1>
+        <h1>Recuperar contraseña</h1>
         <p v-if="query.err" class="sysMsg">{{ query.err }}</p>
-        <form v-on:submit="login" action="">
-            <label for="username" class="form-label">Username:</label>
+        <form v-on:submit="makeRecovery">
+            <p>Ingrese el correo electrónico vinculado a su cuenta.</p>
+            <label for="email" class="form-label">Correo:</label>
             <input 
                 class="form-input" 
-                name="user" 
-                id="username" 
-                placeholder="Ingrese su nombre de usuario"
-                required
-            >
-
-            <label for="contra" class="form-label">Contraseña:</label>
-            <input
-                class="form-input"
-                type="password" 
-                name="pass" 
-                id="contra"
-                placeholder="Ingrese su contraseña"
+                name="email" 
+                id="email" 
+                placeholder="Ingrese su correo"
                 required
             >
             <p class="err" v-if="error">{{error}}</p>
-            <input type="submit" value="Siguiente">
+            <input type="submit" value="Enviar correo de recuperación">
         </form>
-        <p>¿No tienes una cuenta? <NuxtLink to="/auth/registro">Regístrate</NuxtLink></p>
-        <p><NuxtLink to="/auth/recover">Olvidaste tu contraseña?</NuxtLink></p>
     </div>   
 </template>
 
@@ -39,7 +28,7 @@
 
     const error = ref('')
 
-    const login = async (e:Event) =>{
+    const makeRecovery = async (e:Event) =>{
 
         e.preventDefault()
 
@@ -49,18 +38,16 @@
 
         const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
 
-        const res = await $fetch('/api/auth/login',{
+        const res = await $fetch('/api/auth/send-recovery',{
             method: 'POST',
             body: formProps
         })
 
         if(res.status){
-            const auth = useAuth()
-            auth.value = true
             navigateTo({
                 path: '/',
                 query:{
-                    msg:"Autenticación exitosa"
+                    msg:"Si el correo es correcto, recibirás un correo de recuperación"
                 }
             })
         }
@@ -78,7 +65,6 @@
 </script>
 
 <style scoped>
-
 .sysMsg{
     background-color: var(--error-color);
     padding: 0.4em 1em;
@@ -95,7 +81,7 @@ h1{
 form{
     min-width: 300px;
     background-color: var(--bg);
-    padding: 3rem 2rem;
+    padding: 2rem;
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
@@ -114,21 +100,4 @@ form input{
     overflow: hidden;
     white-space: nowrap;
 }
-
-@keyframes appear{
-    0%{
-        max-height: 0;
-        max-width: 0;
-    }
-    30%{
-        max-width: 600px;
-        max-height: 100px;
-    }
-    100%{
-        max-height: 0;
-        max-width: 0;
-    }
-}
-
-
 </style>

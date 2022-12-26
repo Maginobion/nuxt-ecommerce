@@ -1,31 +1,30 @@
 <template>
     <div>
-        <h1>Login</h1>
+        <h1>Restablecer contraseña</h1>
         <p v-if="query.err" class="sysMsg">{{ query.err }}</p>
-        <form v-on:submit="login" action="">
-            <label for="username" class="form-label">Username:</label>
+        <form v-on:submit="resetPass" action="">
+            <label for="pass" class="form-label">Nueva contraseña:</label>
             <input 
-                class="form-input" 
-                name="user" 
-                id="username" 
-                placeholder="Ingrese su nombre de usuario"
-                required
-            >
-
-            <label for="contra" class="form-label">Contraseña:</label>
-            <input
                 class="form-input"
                 type="password" 
                 name="pass" 
-                id="contra"
+                id="pass" 
                 placeholder="Ingrese su contraseña"
                 required
             >
+
+            <label for="rePass" class="form-label">Repita la nueva contraseña:</label>
+            <input
+                class="form-input"
+                type="password" 
+                name="rePass" 
+                id="rePass"
+                placeholder="Vuelva a ingresar su contraseña"
+                required
+            >
             <p class="err" v-if="error">{{error}}</p>
-            <input type="submit" value="Siguiente">
+            <input type="submit" value="Confirmar">
         </form>
-        <p>¿No tienes una cuenta? <NuxtLink to="/auth/registro">Regístrate</NuxtLink></p>
-        <p><NuxtLink to="/auth/recover">Olvidaste tu contraseña?</NuxtLink></p>
     </div>   
 </template>
 
@@ -34,12 +33,12 @@
     const { query } = useRoute()
 
     definePageMeta({
-        middleware: 'is-guest'
+        middleware: ['is-guest','is-valid-token']
     })
 
     const error = ref('')
 
-    const login = async (e:Event) =>{
+    const resetPass = async (e:Event) =>{
 
         e.preventDefault()
 
@@ -47,25 +46,25 @@
         
         const formData = new FormData(values)
 
+        formData.append('recoveryKey', query.code as string)
+
         const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
 
-        const res = await $fetch('/api/auth/login',{
+        const { status, msg } = await $fetch('/api/auth/reset-pass',{
             method: 'POST',
             body: formProps
         })
 
-        if(res.status){
-            const auth = useAuth()
-            auth.value = true
+        if(status){
             navigateTo({
                 path: '/',
                 query:{
-                    msg:"Autenticación exitosa"
+                    msg: msg
                 }
             })
         }
-        else if (res.msg){
-            ponerErrores(res.msg)
+        else if (msg){
+            ponerErrores(msg)
         }
     }
 

@@ -111,6 +111,26 @@
                 </tr>
             </tbody>
         </table>
+        <table v-if="!productPending">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Existencias</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="product in products">
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        <button @click="editProduct(product._id)">Editar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -130,14 +150,25 @@
 
     const client = useSupabase()
 
-    const {data:categories, pending, refresh} = await useFetch('/api/categories/all')
+    const {data:categories, refresh} = await useFetch('/api/categories/all')
 
     const headers = useRequestHeaders(['cookie'])
+
+    const editProduct = (id: string) =>{
+        navigateTo({
+            path:'/productos/edit',
+            query:{
+                id: id
+            }
+        })
+    }
 
     const {data:users, pending: userPending, refresh: userRefresh} = await useFetch('/api/users/getAll',{
         method: 'post',
         headers: headers as HeadersInit
     })
+
+    const {data:products, pending: productPending, refresh: productRefresh} = await useFetch('/api/products/all')
 
     const giveAdmin = async (id: string) =>{
         const res = await $fetch('/api/users/makeAdmin',{
@@ -169,7 +200,7 @@
         const formData = new FormData(values)
 
         if(!imagen.value){
-            console.log('xd')
+            ponerErrores('Selecciona una imagen')
             return
         }
         
