@@ -146,16 +146,18 @@
 </template>
 
 <script setup lang="ts">
+import { actualizarCategorias } from '~~/controllers/dashboardController';
+
 
     definePageMeta({
-        middleware: ['auth', 'is-admin']
+        middleware: ['is-admin']
     })
 
     const imagen = ref<File | undefined>()
 
     const mensajes = ref<boolean | string>('')
 
-    const error = ref('')
+    const error = ref<String | undefined>()
 
     const { query } = useRoute()
 
@@ -163,7 +165,7 @@
 
     const client = useSupabase()
 
-    const {data:categories, refresh} = await useFetch('/api/categories/all')
+    const {data:categories, refresh} = await actualizarCategorias()
 
     const headers = useRequestHeaders(['cookie'])
 
@@ -176,7 +178,7 @@
         })
     }
 
-    const {data:users, pending: userPending, refresh: userRefresh} = await useFetch('/api/users/getAll',{
+    const {data:users, pending: userPending, refresh: userRefresh} = await useFetch('/api/users/all',{
         method: 'post',
         headers: headers as HeadersInit
     })

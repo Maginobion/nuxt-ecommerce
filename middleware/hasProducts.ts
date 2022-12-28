@@ -34,6 +34,16 @@ export default defineNuxtRouteMiddleware(async (to,from)=>{
             }
         })
     } else if(res.user){
+      
+        if(res.user.cart.items.length<1){
+            return navigateTo({
+                path: '/',
+                query:{
+                    err: 'Acceso inválido'
+                }
+            })
+        }
+
         const total_price = res.user.cart.items.reduce((prev: number,curr: ProductLine)=> prev + curr.total_price, 0)
 
         if(total_price<10){

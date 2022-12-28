@@ -13,12 +13,12 @@ export default defineNuxtRouteMiddleware(async (to,from)=>{
 
     const headers = useRequestHeaders(['cookie'])
 
-    const res = await $fetch('/api/auth/admin-verify',{
+    const { status, msg, user } = await $fetch('/api/auth/user-verify',{
         method: 'post',
         headers: headers as HeadersInit
     })
 
-    if(!res.status){
+    if(!status){
         const auth = useAuth()
         auth.value = false
         const token = useCookie('Authorization')
@@ -26,11 +26,11 @@ export default defineNuxtRouteMiddleware(async (to,from)=>{
         return navigateTo({
             path: '/auth/login',
             query:{
-                err: res.msg
+                err: msg
             }
         })
-    } else if(res.user){
-        if(res.user.role !== 1 && res.user.role !== 2){
+    } else if(user){
+        if(user.role === 0){
             return navigateTo({
                 path: '/',
                 query:{

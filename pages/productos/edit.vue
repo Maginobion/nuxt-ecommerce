@@ -94,8 +94,6 @@ const { query } = useRoute()
 
 const {data:categories} = await useFetch('/api/categories/all')
 
-
-
 const {data: product, pending} = await useFetch<ProductType>('/api/products/'+query.id,{
     key: query.id as string
 })
@@ -143,7 +141,7 @@ const uploadData = async (data: object) =>{
 
     if(res.status){
         navigateTo({
-            path: '/admin/dashboard',
+            path: '/',
             query:{
                 msg:"Producto editado con éxito"
             }

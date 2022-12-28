@@ -33,7 +33,7 @@
     const { query } = useRoute()
 
     definePageMeta({
-        middleware: ['is-guest','is-valid-token']
+        middleware: ['is-valid-token']
     })
 
     const error = ref('')

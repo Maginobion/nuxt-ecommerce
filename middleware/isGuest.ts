@@ -1,13 +1,12 @@
 export default defineNuxtRouteMiddleware((to,from)=>{
 
-    const auth = useAuth()
+    const token = useCookie('Authorization')
 
-    if(auth.value){
-        console.log('Middleware guest')
+    if(token){
         return navigateTo({
             path: '/',
             query:{
-                err:"Ya estás logueado"
+                err:"Acceso inválido"
             }
         })
     }

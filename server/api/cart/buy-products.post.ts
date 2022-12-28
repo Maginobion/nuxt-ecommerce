@@ -78,11 +78,11 @@ export default defineEventHandler(async (event)=>{
 
     const total_price = user.cart.items.reduce((prev:number,curr:CartProduct)=> prev + curr.total_price, 0)
 
-    const peticionVISA = (precio:number) =>{
+    const realizarPeticionVISA = (precio:number) =>{
         if(precio) return true
     }
 
-    const res = peticionVISA(total_price)
+    const res = realizarPeticionVISA(total_price)
 
     if(!res){
         return { 
@@ -95,7 +95,7 @@ export default defineEventHandler(async (event)=>{
 
     const invoiceNumber = seq.toString().padStart(7,'0')
 
-    const invoice = new Invoice({
+    const invoice = await Invoice.create({
         invoiceNumber: invoiceNumber,
         userId: user._id,
         delivered: false,
@@ -106,8 +106,6 @@ export default defineEventHandler(async (event)=>{
         items: user.cart.items,
         total_price: total_price
     })
-
-    await invoice.save()
 
     user.cart.items = []
 

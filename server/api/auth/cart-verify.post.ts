@@ -50,13 +50,6 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    if(user.cart.items.length<1){
-        return { 
-            status: false,
-            msg: 'Acceso inválido'
-        }
-    }
-
     return {
         status: true,
         user: user

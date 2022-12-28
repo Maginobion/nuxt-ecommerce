@@ -50,7 +50,7 @@
 <script setup lang="ts">
 
 definePageMeta({
-    middleware: ['auth', 'has-products']
+    middleware: ['has-products']
 })
 
 const lat = ref()

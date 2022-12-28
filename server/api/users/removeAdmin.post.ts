@@ -47,7 +47,7 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    if(user.role !== 1 && user.role !== 2){
+    if(user.role === 0){
         return { 
             status: false,
             msg: 'Acceso inválido'
@@ -65,9 +65,16 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
+    if(foundUser.role===0){
+        return { 
+            status: false,
+            msg: 'Acceso inválido'
+        }
+    }
+
     foundUser.role = 0
 
-    foundUser.save()
+    await foundUser.save()
 
     return {
         status: true,

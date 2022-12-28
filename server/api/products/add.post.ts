@@ -1,6 +1,7 @@
 import Product from "~~/server/db/models/product"
-import Category from "~~/server/db/models/category"
+import CategoryModel from "~~/server/db/models/category"
 import jwt from 'jsonwebtoken'
+import User from "~~/server/db/models/user"
 
 type DecodedCookie = {
     exp: number,
@@ -9,25 +10,50 @@ type DecodedCookie = {
     iat: number
 }
 
+const findUser = async (username: string) =>{
+    const user = await User.findOne({name: username})
+    return user
+}
+
 export default defineEventHandler(async (event)=>{
 
-    const token = getCookie(event, 'Authorization')
+    const browserToken = getCookie(event, 'Authorization')
 
-    if(!token){
+    if(!browserToken){
         return { 
             status: false,
-            msg: 'No estás logueado' 
+            msg: 'No estás logueado'
         }
     }
 
-    try{
-        jwt.verify(token,'secret') as DecodedCookie
+    let decoded
+
+    try{ 
+        decoded = jwt.verify(browserToken as string,'secret') as DecodedCookie
     }
     
     catch{
+        deleteCookie(event, 'Authorization')      
         return { 
             status: false,
-            msg: 'Acceso inválido' 
+            msg: 'Acceso inválido'
+        }
+    }
+
+    const user = await findUser(decoded.username)
+
+    if(!user){
+        return { 
+            status: false,
+            msg: 'Acceso inválido'
+        }
+    }
+
+    
+    if(user.role===0){
+        return { 
+            status: false,
+            msg: 'Acceso inválido'
         }
     }
 
@@ -40,7 +66,7 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    if( isNaN(Number(price)) || isNaN(Number(quantity))){
+    if( isNaN(Number(price)) || isNaN(Number(quantity)) || price < 0 || quantity < 0){
         return { 
             status: false,
             msg: 'Ingrese valores válidos' 
@@ -63,7 +89,7 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    const category = await Category.findOne({_id:Category})
+    const category = await CategoryModel.findOne({_id:Category})
 
     if(!category){
         return { 

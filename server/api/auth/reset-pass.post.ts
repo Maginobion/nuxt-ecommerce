@@ -4,6 +4,13 @@ export default defineEventHandler(async (event) => {
 
     const { pass, rePass, recoveryKey } = await readBody(event) // Pass params via JSON in the POST request
 
+    if(!pass.trim() || !rePass.trim() || !recoveryKey.trim()){
+        return {
+            status: false,
+            msg: 'Rellene todos los campos.' 
+        }
+    }
+
     if(pass.trim() !== rePass.trim()){
         return {
             status: false,
@@ -34,8 +41,12 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    user.pass = pass
-    user.recoveryKey = null
+    const restablecer = () =>{
+        user.pass = pass
+        user.recoveryKey = null
+    }
+
+    restablecer()
 
     await user.save()
 
