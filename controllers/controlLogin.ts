@@ -1,6 +1,6 @@
 export const error = ref('')
 
-export const register = async (e:Event) =>{
+export const login = async (e:Event) =>{
 
     e.preventDefault()
 
@@ -10,26 +10,26 @@ export const register = async (e:Event) =>{
 
     const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
 
-    const { status, msg } = await $fetch('/api/auth/signup',{
+    const res = await $fetch('/api/auth/login',{
         method: 'POST',
         body: formProps
     })
-    
-    if(status){
+
+    if(res.status){
         const auth = useAuth()
         auth.value = true
         navigateTo({
             path: '/',
             query:{
-                msg:"Registro exitoso"
+                msg:"Autenticación exitosa"
             }
         })
     }
-
-    if (!status && msg) {
-        ponerErrores(msg)
+    else if (res.msg){
+        ponerErrores(res.msg)
     }
 }
+
 const ponerErrores = (err: string) =>{
     error.value = err
     setTimeout(()=>{

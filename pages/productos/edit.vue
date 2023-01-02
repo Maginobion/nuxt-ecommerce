@@ -78,86 +78,19 @@
 
 <script setup lang="ts">
 
-import { ProductType } from '~~/server/db/types';
+import { 
+    categories,
+    product,
+    getImage,
+    error,
+    submitProductEdit
+} from '~~/controllers/controlProductoEdit';
 
 definePageMeta({
-    middleware: ['auth', 'is-admin']
+    middleware: ['is-admin']
 })
 
-const imagen = ref<File | undefined>()
 
-const client = useSupabase()
-
-const error = ref('')
-
-const { query } = useRoute()
-
-const {data:categories} = await useFetch('/api/categories/all')
-
-const {data: product, pending} = await useFetch<ProductType>('/api/products/'+query.id,{
-    key: query.id as string
-})
-
-const getImage = (e:Event) => {
-    const target = e.target as HTMLInputElement
-    imagen.value = target.files?.[0]
-}
-
-const submitProductEdit = async (e:Event) =>{
-
-    e.preventDefault()
-
-    const values = e.target as HTMLFormElement
-
-    const formData = new FormData(values)
-
-    if(!imagen.value){
-        ponerErrores('Selecciona una imagen')
-        return
-    }
-
-    const { data, error } = await client
-    .storage
-    .from('ecommerce-bucket')
-    .upload(new Date().toISOString(), imagen.value, {
-        cacheControl: '3600',
-        upsert: false,
-    })
-
-    formData.append('image', data?.path as string)
-    formData.append('id', query.id as string)
-
-    const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
-
-    uploadData(formProps)      
-}
-
-const uploadData = async (data: object) =>{
-
-    const res = await $fetch('/api/products/edit',{
-        method: 'POST',
-        body: data,
-    })   
-
-    if(res.status){
-        navigateTo({
-            path: '/',
-            query:{
-                msg:"Producto editado con éxito"
-            }
-        })
-    }
-    else if (res.msg){
-        ponerErrores(res.msg)
-    }
-}
-
-const ponerErrores = (err: string) =>{
-    error.value = err
-    setTimeout(()=>{
-        error.value=''
-    },4000)
-}
 </script>
 
 <style scoped>

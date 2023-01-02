@@ -4,8 +4,6 @@ export default defineNuxtRouteMiddleware(async (to,from)=>{
 
     const token = useCookie('Authorization')
 
-    console.log(token.value)
-
     if(!token.value){
         return navigateTo({
             path: '/auth/login',
@@ -33,7 +31,8 @@ export default defineNuxtRouteMiddleware(async (to,from)=>{
                 err: res.msg
             }
         })
-    } else if(res.user){
+    }
+    if(res.user){
       
         if(res.user.cart.items.length<1){
             return navigateTo({

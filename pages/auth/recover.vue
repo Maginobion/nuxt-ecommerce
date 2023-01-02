@@ -20,48 +20,14 @@
 
 <script setup lang="ts">
 
+    import { makeRecovery, error } from '@@/controllers/controlRecover'
+
     const { query } = useRoute()
 
     definePageMeta({
         middleware: 'is-guest'
     })
 
-    const error = ref('')
-
-    const makeRecovery = async (e:Event) =>{
-
-        e.preventDefault()
-
-        const values = e.target as HTMLFormElement
-        
-        const formData = new FormData(values)
-
-        const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
-
-        const res = await $fetch('/api/auth/send-recovery',{
-            method: 'POST',
-            body: formProps
-        })
-
-        if(res.status){
-            navigateTo({
-                path: '/',
-                query:{
-                    msg:"Si el correo es correcto, recibirás un correo de recuperación"
-                }
-            })
-        }
-        else if (res.msg){
-            ponerErrores(res.msg)
-        }
-    }
-
-    const ponerErrores = (err: string) =>{
-        error.value = err
-        setTimeout(()=>{
-            error.value=''
-        },4000)
-    }
 </script>
 
 <style scoped>

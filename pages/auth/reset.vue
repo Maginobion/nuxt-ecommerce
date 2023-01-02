@@ -30,50 +30,14 @@
 
 <script setup lang="ts">
 
+    import { resetPass, error } from '@@/controllers/controlRecover'
+
     const { query } = useRoute()
 
     definePageMeta({
         middleware: ['is-valid-token']
     })
 
-    const error = ref('')
-
-    const resetPass = async (e:Event) =>{
-
-        e.preventDefault()
-
-        const values = e.target as HTMLFormElement
-        
-        const formData = new FormData(values)
-
-        formData.append('recoveryKey', query.code as string)
-
-        const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
-
-        const { status, msg } = await $fetch('/api/auth/reset-pass',{
-            method: 'POST',
-            body: formProps
-        })
-
-        if(status){
-            navigateTo({
-                path: '/',
-                query:{
-                    msg: msg
-                }
-            })
-        }
-        else if (msg){
-            ponerErrores(msg)
-        }
-    }
-
-    const ponerErrores = (err: string) =>{
-        error.value = err
-        setTimeout(()=>{
-            error.value=''
-        },4000)
-    }
 </script>
 
 <style scoped>

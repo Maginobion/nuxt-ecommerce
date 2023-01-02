@@ -41,6 +41,7 @@
         method: 'post',
         headers: headers as HeadersInit
     })
+    
 </script>
 
 <style scoped>

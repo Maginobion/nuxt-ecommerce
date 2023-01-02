@@ -12,9 +12,11 @@
 
 <script setup lang="ts">
 
-    const { query } = useRoute()
+    import {
+        products
+    } from '~~/controllers/test';
 
-    const { data: products } = await useFetch('/api/products/all')
+    const { query } = useRoute()
 
 </script>
 

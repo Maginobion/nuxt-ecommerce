@@ -1,31 +1,60 @@
-import { Ref } from "vue"
+export const imagen = ref<File | undefined>()
 
-const client = useSupabase()
+export const mensajes = ref<boolean | string>('')
 
-export const actualizarCategorias = async() =>{
-    const {data, refresh} = await useFetch('/api/categories/all')
-    return {data, refresh}
+export const error = ref<String | undefined>()
+
+export const disabled = ref<boolean>(false)
+
+const actualizarCategorias = async() =>{
+    const data = await $fetch('/api/categories/all')
+    return { data }
 }
 
-export const actualizarUsuarios = async() =>{
+const actualizarUsuarios = async() =>{
 
-    const headers = useRequestHeaders(['cookie'])
-
-    const {data, pending: userPending, refresh} = await useFetch('/api/users/all',{
+    const data = await $fetch('/api/users/all',{
         method: 'post',
-        headers: headers as HeadersInit
     })
+
+    return { data }
 }
 
-export const actualizarProductos = async() =>{
-
-    const headers = useRequestHeaders(['cookie'])
-
-    const {data, refresh} = await useFetch('/api/categories/all')
-    return {data, refresh}
+const actualizarProductos = async() =>{
+    const data = await $fetch('/api/products/all')
+    return { data }
 }
 
-export const submitProductForm = async (e:Event, imagen: Ref<File | undefined>, errorRef: Ref<String | undefined>) =>{
+export const {data: categories} = await actualizarCategorias()
+
+export const {data: users} = await actualizarUsuarios()
+
+export const {data: products} = await actualizarProductos()
+
+export const giveAdmin = async (id: string) =>{
+    const { status, msg } = await $fetch('/api/users/makeAdmin',{
+        method: 'post',
+        body: { id: id }
+    })
+
+}
+
+export const removeAdmin = async (id: string) =>{
+    const { status, msg } = await $fetch('/api/users/removeAdmin',{
+        method: 'post',
+        body: { id: id }
+    })
+
+}
+
+export const getImage = (e:Event) => {
+    const target = e.target as HTMLInputElement
+    imagen.value = target.files?.[0]
+}
+
+export const submitProductForm = async (e:Event) =>{
+
+    const client = useSupabase()
 
     e.preventDefault()
 
@@ -34,7 +63,7 @@ export const submitProductForm = async (e:Event, imagen: Ref<File | undefined>, 
     const formData = new FormData(values)
 
     if(!imagen.value){
-        ponerErrores('Selecciona una imagen', errorRef)
+        ponerErrores('Selecciona una imagen')
         return
     }
     
@@ -50,9 +79,14 @@ export const submitProductForm = async (e:Event, imagen: Ref<File | undefined>, 
 
     const formProps = Object.fromEntries(formData) as { [a: string]: string | number }
 
+    uploadData(formProps)      
+}
+
+const uploadData = async (data: object) =>{
+
     const res = await $fetch('/api/products/add',{
         method: 'POST',
-        body: formProps,
+        body: data,
     })   
     
     if(res.status){
@@ -64,11 +98,30 @@ export const submitProductForm = async (e:Event, imagen: Ref<File | undefined>, 
         })
     }
     else if (res.msg){
-        ponerErrores(res.msg, errorRef)
+        ponerErrores(res.msg)
     }
 }
 
-const ponerErrores = (err: string, error: Ref<String | undefined>) =>{
+export const submitCategoryForm = async (e:Event) => {
+    
+    e.preventDefault()
+
+    const formData = new FormData(e.target as HTMLFormElement)
+
+    const formProps = Object.fromEntries(formData)
+
+    const res = await $fetch('/api/categories/add',{
+        method: 'POST',
+        body: formProps
+    }).catch(e=>mensajes.value=e)
+
+    if(res.res===true){
+        mensajes.value='Categoría registrada con éxito.'
+        disabled.value=true
+    }
+}
+
+const ponerErrores = (err: string) =>{
     error.value = err
     setTimeout(()=>{
         error.value=''

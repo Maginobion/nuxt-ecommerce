@@ -1,9 +1,9 @@
 <template>
     <div>
         <h1>Carrito</h1>
-        <p v-if="message" class="sysMsg">{{ message }}</p>
-        <div v-if="pending">Cargando...</div>
-        <table v-else-if="cart?.items?.length">
+        <p v-if="useRoute().query?.err" class="sysMsg">{{ useRoute().query?.err }}</p>
+        <div v-if="false">Cargando...</div>
+        <table v-else-if="cartItems?.items?.length">
             <thead>
                 <th>Producto</th>
                 <th>Cantidad</th>
@@ -11,7 +11,7 @@
                 <th>Acción</th>
             </thead>
             <tbody>
-                <tr v-for="item in cart.items">
+                <tr v-for="item in cartItems.items">
                     <td>{{ item.productName }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>{{ item.total_price }}</td>
@@ -20,7 +20,7 @@
                 <tr>
                     <td></td>
                     <td>Total</td>
-                    <td>S/.{{ total }}</td>
+                    <td>S/.{{ cartItems?.items?.reduce((prev:number,curr: ProductLine)=> prev + curr.total_price, 0) }}</td>
                 </tr>
             </tbody>
             
@@ -36,32 +36,15 @@
 
 <script setup lang="ts">
 
+import {
+    cartItems,
+    remove,
+} from '@@/controllers/controlCart'
+import { ProductLine } from '~~/server/db/types';
+
 definePageMeta({
     middleware: 'auth'
 })
-
-const { query } = useRoute()
-
-const message = computed(()=>query.err)
-
-const headers = useRequestHeaders(['cookie'])
-
-const { data:cart, pending, refresh } = await useFetch<{items:{productId:string, quantity: number, total_price:number, productName: string}[]}>('/api/cart/get-products',{
-    method: 'post',
-    server: false,
-    headers: headers as HeadersInit,
-    cache: 'no-cache'
-})
-
-const remove = async (productId:string) => {
-    const { status } = await $fetch('/api/cart/delete-product',{
-        method:'POST',
-        body: { id: productId }
-    })
-    status && refresh()
-}
-
-const total = computed(()=>cart.value?.items.reduce((prev,curr)=> prev + curr.total_price, 0))
 
 </script>
 
