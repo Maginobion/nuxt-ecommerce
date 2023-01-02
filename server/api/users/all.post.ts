@@ -47,7 +47,7 @@ export default defineEventHandler(async (event)=>{
         }
     }
 
-    if(user.role !== 1 && user.role !== 2){
+    if(user.role == 0){
         return { 
             status: false,
             msg: 'Acceso inválido'

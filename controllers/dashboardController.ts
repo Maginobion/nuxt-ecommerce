@@ -27,16 +27,22 @@ const actualizarProductos = async() =>{
 
 export const {data: categories} = await actualizarCategorias()
 
-export const {data: users} = await actualizarUsuarios()
-
 export const {data: products} = await actualizarProductos()
+
+export const {data: users} = await actualizarUsuarios()
 
 export const giveAdmin = async (id: string) =>{
     const { status, msg } = await $fetch('/api/users/makeAdmin',{
         method: 'post',
         body: { id: id }
     })
-
+    if(!status && msg) ponerErrores(msg)
+    else return navigateTo({
+        path: '/',
+        query:{
+            msg:'Datos actualizados exitosamente.'
+        }
+    })
 }
 
 export const removeAdmin = async (id: string) =>{
@@ -44,7 +50,7 @@ export const removeAdmin = async (id: string) =>{
         method: 'post',
         body: { id: id }
     })
-
+    !status && msg && ponerErrores(msg)
 }
 
 export const getImage = (e:Event) => {

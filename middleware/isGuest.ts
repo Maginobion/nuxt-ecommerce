@@ -1,13 +1,7 @@
+import { validarCookies } from "~~/controllers/controlInvitado"
+
 export default defineNuxtRouteMiddleware((to,from)=>{
 
-    const token = useCookie('Authorization')
+    validarCookies()
 
-    if(token.value){
-        return navigateTo({
-            path: '/',
-            query:{
-                err:"Acceso inválido"
-            }
-        })
-    }
 })

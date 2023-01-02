@@ -5,8 +5,7 @@ const logoutSistema = () =>{
     token.value = null
 }
 
-export default defineNuxtRouteMiddleware(async (to,from)=>{
-
+export const validarCookies = async () =>{
     const token = useCookie('Authorization')
 
     if(!token.value){
@@ -31,7 +30,7 @@ export default defineNuxtRouteMiddleware(async (to,from)=>{
             }
         })
     }
-    if(user.role !== 1 && user.role !== 2){
+    if(user.role === 0){
         return navigateTo({
             path: '/',
             query:{
@@ -39,4 +38,4 @@ export default defineNuxtRouteMiddleware(async (to,from)=>{
             }
         })
     }
-})
+}

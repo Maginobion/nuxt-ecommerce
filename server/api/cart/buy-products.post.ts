@@ -17,6 +17,10 @@ type CartProduct = {
     quantity: number
 }
 
+const vaciarCarrito = (user) =>{
+    user.cart.items = []
+}
+
 export default defineEventHandler(async (event)=>{
 
     const token = getCookie(event, 'Authorization')
@@ -107,7 +111,7 @@ export default defineEventHandler(async (event)=>{
         total_price: total_price
     })
 
-    user.cart.items = []
+    vaciarCarrito(user)
 
     await user.save()
 
