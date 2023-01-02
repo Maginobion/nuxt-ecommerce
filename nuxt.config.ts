@@ -19,4 +19,9 @@ export default defineNuxtConfig({
         }
     },
     css: ['@/assets/css/styles.css'],
+    vite:{
+        build:{
+            target: 'esnext'
+        }
+    }
 })
